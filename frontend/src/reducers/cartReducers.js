@@ -1,11 +1,17 @@
-import { CART_ADD, CART_ADD_FAIL } from '../constants/cartConstants'
+import { CART_ADD, CART_REMOVE } from '../constants/cartConstants'
 
-export const cartReducer = (state = { cartItems: [] }, action) => {
+export const cartReducer = (
+  state = { cartItems: [], shippingAddress: {} },
+  action
+) => {
   switch (action.type) {
     case CART_ADD:
-      return { cartItems: [...state.cartItems, action.payload] }
-    case CART_ADD_FAIL:
-      return { cartItems: state.cartItems, error: action.payload }
+      return { ...state, cartItems: [...state.cartItems, action.payload] }
+    case CART_REMOVE:
+      return {
+        ...state,
+        cartItems: state.cartItems.filter((x) => x.product !== action.payload),
+      }
     default:
       return state
   }
