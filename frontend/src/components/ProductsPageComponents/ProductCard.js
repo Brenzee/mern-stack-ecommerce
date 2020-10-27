@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Link } from 'react-router-dom'
 import { FaShoppingCart } from 'react-icons/fa'
+import { addToCart } from '../../actions/cartActions'
 
-const ProductCard = ({ image, name, price, id, brand }) => {
+const ProductCard = ({ image, name, price, id, brand, history }) => {
+  const dispatch = useDispatch()
+
+  const [qty, setQty] = useState(1)
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(id, qty))
+  }
   return (
     <Col xs={6} md={4} lg={3}>
       <Card className='my-4 mx-0' style={{ minHeight: '380px' }}>
@@ -31,11 +40,11 @@ const ProductCard = ({ image, name, price, id, brand }) => {
             </ListGroup.Item>
             <ListGroup.Item className='p-0 py-2'>Brand: {brand}</ListGroup.Item>
           </ListGroup>
-          <LinkContainer to='/cart/?id=id'>
+          <Link to='/cart' onClick={handleAddToCart}>
             <Button variant='primary' className='m-0 h6' block>
               Add <FaShoppingCart />
             </Button>
-          </LinkContainer>
+          </Link>
         </Card.Body>
       </Card>
     </Col>
