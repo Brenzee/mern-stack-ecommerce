@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import { LinkContainer } from 'react-router-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FaShoppingCart } from 'react-icons/fa'
 import { addToCart } from '../../actions/cartActions'
@@ -9,7 +8,17 @@ import { addToCart } from '../../actions/cartActions'
 const ProductCard = ({ image, name, price, id, brand, history }) => {
   const dispatch = useDispatch()
 
+  const cart = useSelector((state) => state.cart)
+  const { cartItems } = cart
+
   const [qty, setQty] = useState(1)
+  const [button, setButton] = useState(false)
+
+  useEffect(() => {
+    if (cartItems.some((item) => item.product === id)) {
+      setButton(true)
+    }
+  }, [cartItems])
 
   const handleAddToCart = () => {
     dispatch(addToCart(id, qty))
@@ -41,8 +50,19 @@ const ProductCard = ({ image, name, price, id, brand, history }) => {
             <ListGroup.Item className='p-0 py-2'>Brand: {brand}</ListGroup.Item>
           </ListGroup>
           <Link to='/cart' onClick={handleAddToCart}>
-            <Button variant='primary' className='m-0 h6' block>
-              Add <FaShoppingCart />
+            <Button
+              variant='primary'
+              className='m-0 h6'
+              block
+              disabled={button}
+            >
+              {button ? (
+                <>Already in the cart!</>
+              ) : (
+                <>
+                  Add <FaShoppingCart />
+                </>
+              )}
             </Button>
           </Link>
         </Card.Body>

@@ -6,7 +6,18 @@ export const cartReducer = (
 ) => {
   switch (action.type) {
     case CART_ADD:
-      return { ...state, cartItems: [...state.cartItems, action.payload] }
+      const cartItems = state.cartItems
+
+      if (cartItems) {
+        const cart = cartItems.filter(
+          (item) => item.product !== action.payload.product
+        )
+        console.log(cart)
+        return { ...state, cartItems: [...cart, action.payload] }
+      } else {
+        return { ...state, cartItems: [action.payload] }
+      }
+
     case CART_REMOVE:
       return {
         ...state,

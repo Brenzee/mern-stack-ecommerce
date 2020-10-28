@@ -12,13 +12,17 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { RiDeleteBin6Line } from 'react-icons/ri'
-import { removeFromCart } from '../actions/cartActions'
+import { addToCart, removeFromCart } from '../actions/cartActions'
 
 const CartPage = () => {
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
+
+  const handleQtyChange = (id, qty) => {
+    dispatch(addToCart(id, qty))
+  }
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id))
@@ -53,7 +57,21 @@ const CartPage = () => {
                     ${item.price}
                   </Col>
                   <Col md={2} xs={3}>
-                    QTY: {item.qty}
+                    <Form.Control
+                      as='select'
+                      value={item.qty}
+                      onChange={(e) =>
+                        handleQtyChange(item.product, e.target.value)
+                      }
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                    </Form.Control>
                   </Col>
                   <Col md={3} xs={9}>
                     <Button
